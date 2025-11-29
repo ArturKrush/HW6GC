@@ -30,6 +30,21 @@ namespace HW6GC.Lib
             }
         }
 
+        // Патерн для ОДНОГО слова (такий самий, як був: літери, всередині можливі дефіси)
+        private static string wordPattern = @"[A-Za-z]+(?:-[A-Za-z]+)*";
+
+        // Повний патерн:
+        // ^               - початок
+        // {wordPattern}   - перше слово (обов'язкове)
+        // (?:             - початок групи (без запам'ятовування)
+        //   \s            - пробіл
+        //   {wordPattern} - наступне слово
+        // )
+        // {0,2}           - квантифікатор: ця група (пробіл+слово) може бути 0, 1 або 2 рази
+        // $               - кінець
+
+        private static string fullPattern = $@"^{wordPattern}(?:\s{wordPattern}){{0,2}}$";
+
         private string author;
         public string Author
         {
@@ -39,20 +54,6 @@ namespace HW6GC.Lib
                 if (string.IsNullOrWhiteSpace(value))
                     throw new InvalidDataException("Author name cannot be empty.");
 
-                // Патерн для ОДНОГО слова (такий самий, як був: літери, всередині можливі дефіси)
-                string wordPattern = @"[A-Za-z]+(?:-[A-Za-z]+)*";
-
-                // Повний патерн:
-                // ^               - початок
-                // {wordPattern}   - перше слово (обов'язкове)
-                // (?:             - початок групи (без запам'ятовування)
-                //   \s            - пробіл
-                //   {wordPattern} - наступне слово
-                // )
-                // {0,2}           - квантифікатор: ця група (пробіл+слово) може бути 0, 1 або 2 рази
-                // $               - кінець
-
-                string fullPattern = $@"^{wordPattern}(?:\s{wordPattern}){{0,2}}$";
 
                 if (!Regex.IsMatch(value, fullPattern))
                 {
