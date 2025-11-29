@@ -99,6 +99,7 @@ namespace HW6GC.Lib
             Console.WriteLine($"{ToString()} has been deleted.");
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("Stage was ended.");
+            Console.WriteLine("-----");
         }
 
         public static void Test()
