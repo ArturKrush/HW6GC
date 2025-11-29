@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO; // Для InvalidDataException
+using System.IO;
 using System.Text.RegularExpressions;
 
 namespace HW6GC.Lib
@@ -39,19 +39,24 @@ namespace HW6GC.Lib
                 if (string.IsNullOrWhiteSpace(value))
                     throw new InvalidDataException("Author name cannot be empty.");
 
-                // Пояснення Regex:
-                // ^ - початок рядка
-                // [A-Za-z]+ - слово починається з літер
-                // (?:-[A-Za-z]+)* - необов'язкова група: дефіс і знову літери (забороняє "--" або закінчення на "-")
-                // \s - пробіл
-                // Повторюємо цю логіку для трьох слів: Ім'я, Середнє ім'я, Прізвище
-
+                // Патерн для ОДНОГО слова (такий самий, як був: літери, всередині можливі дефіси)
                 string wordPattern = @"[A-Za-z]+(?:-[A-Za-z]+)*";
-                string fullPattern = $@"^{wordPattern}\s{wordPattern}\s{wordPattern}$";
+
+                // Повний патерн:
+                // ^               - початок
+                // {wordPattern}   - перше слово (обов'язкове)
+                // (?:             - початок групи (без запам'ятовування)
+                //   \s            - пробіл
+                //   {wordPattern} - наступне слово
+                // )
+                // {0,2}           - квантифікатор: ця група (пробіл+слово) може бути 0, 1 або 2 рази
+                // $               - кінець
+
+                string fullPattern = $@"^{wordPattern}(?:\s{wordPattern}){{0,2}}$";
 
                 if (!Regex.IsMatch(value, fullPattern))
                 {
-                    throw new InvalidDataException("Author must consist of 3 words (Latin)." +
+                    throw new InvalidDataException("Author name must consist of 1-3 words (Latin). " +
                         "Hyphens allowed only inside words (e.g. Jean-Paul). No double hyphens.");
                 }
                 author = value;
@@ -84,17 +89,22 @@ namespace HW6GC.Lib
 
         public override string ToString()
         {
-            return $"Title: \"{PlayName}\"\nAuthor: {Author}\nGenre: {Genre}\nYear: {Year}";
+            return $"{Genre} play {PlayName} ({Year}) of {Author}";
         }
 
         ~StagePlay()
         {
-            Console.WriteLine($"{PlayName} of {Author} ({Year}) has been deleted");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"{ToString()} has been deleted.");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("Stage was ended.");
         }
 
-        void Test()
+        public static void Test()
         {
-            StagePlay Romeo_and_Juliette = new StagePlay("Romeo and Juliette", "Whillam Shekspire", PlayGenre.Tragedy, 1597);
+            StagePlay Romeo_and_Juliete = new StagePlay("Romeo and Juliete", "William Shakespeare", PlayGenre.Tragedy, 1597);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(Romeo_and_Juliete.ToString() + " in progress.");
         }
     }
 }

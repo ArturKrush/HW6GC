@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HW6GC.Lib;
+using System;
 
 namespace HW6GC
 {
@@ -6,7 +7,9 @@ namespace HW6GC
     {
         public static void Main(string[] args)
         {
-
+            StagePlay.Test();
+            GC.Collect();
+            Console.ReadKey();
         }
     }
 }
