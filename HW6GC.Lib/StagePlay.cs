@@ -16,7 +16,7 @@ namespace HW6GC.Lib
         Fantasy
     }
 
-    public class StagePlay
+    public class StagePlay : IDisposable
     {
         private string playName;
         public string PlayName
@@ -107,6 +107,14 @@ namespace HW6GC.Lib
             StagePlay Romeo_and_Juliete = new StagePlay("Romeo and Juliete", "William Shakespeare", PlayGenre.Tragedy, 1597);
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(Romeo_and_Juliete.ToString() + " in progress.");
+        }
+
+        public void Dispose()
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"{ToString()} has been deleted.");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("Stage was ended.");;
         }
     }
 }
