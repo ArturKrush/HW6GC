@@ -20,7 +20,7 @@ namespace HW6GC.Lib
 
         private static string wordPattern = @"[A-Za-z]+(?:-[A-Za-z]+)*";
 
-        private static string fullPattern = $@"^{wordPattern}(?:\s{wordPattern}){{0,2}}$";
+        private static string fullPattern = $@"^{wordPattern}(?:\s{wordPattern}){{0,3}}$";
 
         private string name;
         public string Name
@@ -34,7 +34,7 @@ namespace HW6GC.Lib
 
                 if (!Regex.IsMatch(value, fullPattern))
                 {
-                    throw new InvalidDataException("Shop name must consist of 1-3 words (Latin). " +
+                    throw new InvalidDataException("Shop name must consist of 1-4 words (Latin). " +
                         "Hyphens allowed only inside words (e.g. Epicentr-K). No double hyphens.");
                 }
                 name = value;
@@ -79,6 +79,22 @@ namespace HW6GC.Lib
         public void Dispose()
         {
             Console.WriteLine(ToString() + " was closed");
+            Name = "XXX XXX XXX";
+            Type = ShopType.undefined;
+            Address = "blank address";
+            Console.WriteLine(ToString());
+        }
+
+        public static void Test()
+        {
+            Shop shop1 = new("Thirty three square meters", ShopType.building_materials,
+                "Ukraine, Kyiv city, prosp. Gnata Hotkevicha, 10");
+            Console.WriteLine($"{shop1.ToString()} is working.");
+        }
+
+        ~Shop()
+        {
+            Console.WriteLine(ToString() + " was closed.");
             Name = "XXX XXX XXX";
             Type = ShopType.undefined;
             Address = "blank address";

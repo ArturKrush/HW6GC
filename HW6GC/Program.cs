@@ -9,16 +9,18 @@ namespace HW6GC
         public static void Main(string[] args)
         {
             //Task 1
-            //StagePlay.Test();
-            //GC.Collect();
-
+            //Тестування деструктора класу StagePlay
+            StagePlay.Test();
+            GC.Collect();
+            GC.WaitForPendingFinalizers(); //Без цього програма іноді ломається
 
             //Task 2
-            //using (Shop shop = new("Silpo", ShopType.food, "Ukraine, Odesa city, vul. Zalyznychna, 3"))
-            //{
-            //    Console.WriteLine($"{shop.ToString()} is working.");
-            //}
-            //Console.WriteLine("-----");
+            //За областю видимості using викликається метод Dispose()
+            using (Shop shop = new("Silpo", ShopType.food, "Ukraine, Odesa city, vul. Zalyznychna, 3"))
+            {
+                Console.WriteLine($"{shop.ToString()} is working.");
+            }
+            Console.WriteLine("-----");
 
             //Task 3
             using (StagePlay stage = new("To Kill a Mockingbird", "Harper Lee", PlayGenre.Drama, 1960))
@@ -27,7 +29,10 @@ namespace HW6GC
                 Console.WriteLine(stage.ToString() + " in progress.");
             }
 
-
+            //Тестування деструктора для класу Shop
+            Shop.Test();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
     }
 }
